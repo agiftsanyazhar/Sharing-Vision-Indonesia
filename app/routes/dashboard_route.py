@@ -17,3 +17,8 @@ def create_post():
 @dashboard_bp.route("/edit-post/<int:id>")
 def edit_post(id):
     return render_template("articles/edit-post.html", id=id)
+
+
+@dashboard_bp.route("/preview")
+def preview():
+    return render_template("articles/preview.html")

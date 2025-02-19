@@ -1,0 +1,65 @@
+{% extends 'layouts/dashboard/app.html' %} {% block content %}
+
+<section class="section">
+  <div class="card shadow">
+    <div class="card-header">
+      <h5 class="card-title">Preview</h5>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Content</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Created Date</th>
+              <th>Updated Date</th>
+            </tr>
+          </thead>
+          <tbody id="post-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetchPosts();
+  });
+
+  function fetchPosts(status = "all") {
+    fetch("http://127.0.0.1:5000/api/article")
+      .then((response) => response.json())
+      .then((data) => {
+        let posts = data.data;
+        posts = posts.filter((post) => post.status === "Publish");
+
+        let tableBody = document.getElementById("post-body");
+        tableBody.innerHTML = "";
+
+        posts.forEach((post, index) => {
+          let row = document.createElement("tr");
+          row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${post.title}</td>
+          <td>${post.content.substring(0, 50)}</td>
+          <td>${post.category}</td>
+          <td>${post.status}</td>
+          <td>${post.created_date}</td>
+          <td>${post.updated_date}</td>
+        `;
+          tableBody.appendChild(row);
+        });
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+      });
+  }
+</script>
+
+{% endblock %}
