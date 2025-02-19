@@ -16,18 +16,6 @@
 
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='dashboard-assets/extensions/quill/quill.snow.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='dashboard-assets/extensions/quill/quill.bubble.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='dashboard-assets/extensions/sweetalert2/sweetalert2.min.css') }}"
-    />
-    <link
-      rel="stylesheet"
       href="{{ url_for('static', filename='dashboard-assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}"
     />
     <link
@@ -88,10 +76,6 @@
     <script src="{{ url_for('static', filename='dashboard-assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ url_for('static', filename='dashboard-assets/compiled/js/app.js') }}"></script>
 
-    <script src="{{ url_for('static', filename='dashboard-assets/extensions/quill/quill.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='dashboard-assets/static/js/pages/quill.js') }}"></script>
-    <script src="{{ url_for('static', filename='dashboard-assets/extensions/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='dashboard-assets/static/js/pages/sweetalert2.js') }}"></script>
     <script src="{{ url_for('static', filename='dashboard-assets/extensions/jquery/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='dashboard-assets/extensions/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='dashboard-assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
@@ -106,17 +90,6 @@
       yearElements.forEach((element) => {
         element.innerHTML = year;
       });
-    </script>
-
-    <script>
-      function alertDialog(inputName, label) {
-        Swal.fire({
-          icon: "warning",
-          title: "Peringatan!",
-          text: `${label} wajib diisi`,
-          confirmButtonText: "Tutup",
-        });
-      }
     </script>
   </body>
 </html>

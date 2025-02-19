@@ -6,7 +6,9 @@
       <h5 class="card-title">
         All Posts
 
-        <a href="#" class="btn btn-success btn-sm float-end"
+        <a
+          href="{{ url_for('dashboard.create_post') }}"
+          class="btn btn-success btn-sm float-end"
           ><i class="bi bi-plus-lg"></i
         ></a>
 
@@ -86,7 +88,7 @@
           <td>${post.created_date}</td>
           <td>${post.updated_date}</td>
           <td>
-            <a href="#">
+            <a href="/edit-post/${post.id}">
               <i class="bi bi-pencil-fill text-warning"></i>
             </a>
             <a href="#" onclick="deletePost(${post.id})">

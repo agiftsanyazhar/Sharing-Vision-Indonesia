@@ -3,6 +3,10 @@ from flask import request, jsonify
 from app.models.article import Post
 from app.database import get_db
 from app.schemas import PostSchema, validate_request
+from datetime import datetime, timezone
+import pytz
+
+INDONESIA_TZ = pytz.timezone("Asia/Jakarta")
 
 
 def save_post(id=None):
@@ -36,9 +40,15 @@ def save_post(id=None):
         for key, value in validation.model_dump().items():
             setattr(post, key, value)
 
+        post.updated_date = datetime.now(timezone.utc).astimezone(INDONESIA_TZ)
+
         message = "Article updated successfully."
     else:
-        post = Post(**validation.model_dump())
+        post = Post(
+            **validation.model_dump(),
+            created_date=datetime.now(timezone.utc).astimezone(INDONESIA_TZ),
+            updated_date=datetime.now(timezone.utc).astimezone(INDONESIA_TZ),
+        )
 
         db.add(post)
 

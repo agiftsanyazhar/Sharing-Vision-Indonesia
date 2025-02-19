@@ -1,0 +1,125 @@
+{% extends 'layouts/dashboard/app.html' %} {% block content %}
+
+<section class="section">
+  <div class="card shadow">
+    <div class="card-header">
+      <h5 class="card-title">Create Post</h5>
+    </div>
+
+    <div class="card-body">
+      <form class="form" id="form-modal" action="" method="POST">
+        <div class="row">
+          <div class="col-md-6 col-6">
+            <div class="form-group">
+              <label>Title<span class="text-danger fw-bold">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                name="title"
+                placeholder="Title"
+                required
+                minlength="5"
+                maxlength="255"
+              />
+            </div>
+          </div>
+          <div class="col-md-3 col-3">
+            <div class="form-group">
+              <label>Category<span class="text-danger fw-bold">*</span></label>
+              <select
+                class="form-select"
+                name="category"
+                required
+                data-placeholder="Select Category"
+              >
+                <option value="" disabled selected hidden>
+                  Select Category
+                </option>
+                <option value="News">News</option>
+                <option value="Article">Article</option>
+                <option value="Event">Event</option>
+                <option value="Tips">Tips</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3 col-3">
+            <div class="form-group">
+              <label>Status<span class="text-danger fw-bold">*</span></label>
+              <select
+                class="form-select"
+                name="status"
+                required
+                data-placeholder="Select Status"
+              >
+                <option value="" disabled selected hidden>Select Status</option>
+                <option value="Publish">Publish</option>
+                <option value="Draft">Draft</option>
+                <option value="Trash">Trash</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-12 col-12">
+            <div class="form-group">
+              <label>Content</label>
+              <textarea
+                class="form-control"
+                name="content"
+                placeholder="Content"
+                rows="5"
+                minlength="5"
+              ></textarea>
+            </div>
+          </div>
+          <span class="text-danger fw-bold">* Required</span>
+          <div class="col-md-12 col-12">
+            <div class="form-group mt-3">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("form-modal");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const postData = {
+        title: formData.get("title"),
+        category: formData.get("category"),
+        status: formData.get("status"),
+        content: formData.get("content"),
+      };
+
+      fetch("http://127.0.0.1:5000/api/article", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            alert("Post created successfully!");
+            window.location.href = "/";
+          } else {
+            alert("Failed to create post!");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("An error occurred!");
+        });
+    });
+  });
+</script>
+
+{% endblock %}

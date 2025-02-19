@@ -1,0 +1,145 @@
+{% extends 'layouts/dashboard/app.html' %} {% block content %}
+
+<section class="section">
+  <div class="card shadow">
+    <div class="card-header">
+      <h5 class="card-title">Edit Post</h5>
+    </div>
+
+    <div class="card-body">
+      <form class="form" id="edit-form" action="" method="POST">
+        <input type="hidden" id="post-id" />
+        <div class="row">
+          <div class="col-md-6 col-6">
+            <div class="form-group">
+              <label>Title<span class="text-danger fw-bold">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                placeholder="Title"
+                required
+                minlength="5"
+                maxlength="255"
+              />
+            </div>
+          </div>
+          <div class="col-md-3 col-3">
+            <div class="form-group">
+              <label>Category<span class="text-danger fw-bold">*</span></label>
+              <select
+                class="form-select"
+                id="category"
+                name="category"
+                required
+              >
+                <option value="News">News</option>
+                <option value="Article">Article</option>
+                <option value="Event">Event</option>
+                <option value="Tips">Tips</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3 col-3">
+            <div class="form-group">
+              <label>Status<span class="text-danger fw-bold">*</span></label>
+              <select class="form-select" id="status" name="status" required>
+                <option value="Publish">Publish</option>
+                <option value="Draft">Draft</option>
+                <option value="Trash">Trash</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-12 col-12">
+            <div class="form-group">
+              <label>Content</label>
+              <textarea
+                class="form-control"
+                id="content"
+                name="content"
+                placeholder="Content"
+                rows="5"
+                minlength="5"
+              ></textarea>
+            </div>
+          </div>
+          <span class="text-danger fw-bold">* Required</span>
+          <div class="col-md-12 col-12">
+            <div class="form-group mt-3">
+              <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const postId = window.location.pathname.split("/").pop();
+    fetchPostData(postId);
+
+    document
+      .getElementById("edit-form")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+        updatePost(postId);
+      });
+  });
+
+  function fetchPostData(id) {
+    fetch(`http://127.0.0.1:5000/api/article/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        let post = data.data;
+
+        if (data.success) {
+          document.getElementById("post-id").value = id;
+          document.getElementById("title").value = post.title;
+          document.getElementById("category").value = post.category;
+          document.getElementById("status").value = post.status;
+          document.getElementById("content").value = post.content;
+        } else {
+          alert("Post not found.");
+          window.location.href = "/";
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching post:", error);
+      });
+  }
+
+  function updatePost(id) {
+    const updatedPost = {
+      title: document.getElementById("title").value,
+      category: document.getElementById("category").value,
+      status: document.getElementById("status").value,
+      content: document.getElementById("content").value,
+    };
+
+    fetch(`http://127.0.0.1:5000/api/article/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedPost),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          alert("Post updated successfully.");
+          window.location.href = "/";
+        } else {
+          alert("Failed to update post.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating post:", error);
+      });
+  }
+</script>
+
+{% endblock %}
