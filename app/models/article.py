@@ -1,4 +1,4 @@
-# article model
+# article_model
 from sqlalchemy import Column, Integer, String, Text, Enum, TIMESTAMP
 from datetime import datetime, timezone
 from app.models.base import Base

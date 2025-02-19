@@ -1,4 +1,4 @@
-# database.py
+# database
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.config import DATABASE_URL
@@ -7,6 +7,7 @@ import app.models.article
 from faker import Faker
 
 engine = create_engine(DATABASE_URL)
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
@@ -29,6 +30,7 @@ def reset_database():
         db.commit()
     except Exception as e:
         db.rollback()
+
         print(f"Seeder failed: {e}")
     finally:
         db.close()

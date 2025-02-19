@@ -1,4 +1,4 @@
-# article_view
+# article_route
 from flask import Blueprint
 from app.controllers.article_controller import (
     save_post,
