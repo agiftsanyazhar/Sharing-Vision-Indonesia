@@ -1,0 +1,132 @@
+{% extends 'layouts/dashboard/app.html' %} {% block content %}
+
+<section class="section">
+  <div class="card shadow">
+    <div class="card-header">
+      <h5 class="card-title">
+        All Posts
+
+        <a href="#" class="btn btn-success btn-sm float-end"
+          ><i class="bi bi-plus-lg"></i
+        ></a>
+
+        <ul class="nav nav-tabs mt-2">
+          <li class="nav-item float">
+            <a class="nav-link active" href="#" onclick="filterPosts('all')"
+              >All</a
+            >
+          </li>
+          <li class="nav-item float">
+            <a class="nav-link" href="#" onclick="filterPosts('Publish')"
+              >Publish</a
+            >
+          </li>
+          <li class="nav-item float">
+            <a class="nav-link" href="#" onclick="filterPosts('Draft')"
+              >Draft</a
+            >
+          </li>
+          <li class="nav-item float">
+            <a class="nav-link" href="#" onclick="filterPosts('Trash')"
+              >Trash</a
+            >
+          </li>
+        </ul>
+      </h5>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Content</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Created Date</th>
+              <th>Updated Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="post-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetchPosts();
+  });
+
+  function fetchPosts(status = "all") {
+    fetch("http://127.0.0.1:5000/api/article")
+      .then((response) => response.json())
+      .then((data) => {
+        let posts = data.data;
+
+        if (status !== "all") {
+          posts = posts.filter((post) => post.status === status);
+        }
+
+        let tableBody = document.getElementById("post-body");
+        tableBody.innerHTML = "";
+
+        posts.forEach((post, index) => {
+          let row = document.createElement("tr");
+          row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${post.title}</td>
+          <td>${post.content.substring(0, 50)}</td>
+          <td>${post.category}</td>
+          <td>${post.status}</td>
+          <td>${post.created_date}</td>
+          <td>${post.updated_date}</td>
+          <td>
+            <a href="#">
+              <i class="bi bi-pencil-fill text-warning"></i>
+            </a>
+            <a href="#" onclick="deletePost(${post.id})">
+              <i class="bi bi-trash-fill text-danger"></i>
+            </a>
+          </td>
+        `;
+          tableBody.appendChild(row);
+        });
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+      });
+  }
+
+  function filterPosts(status) {
+    fetchPosts(status);
+
+    document.querySelectorAll(".nav-link").forEach((tab) => {
+      tab.classList.remove("active");
+    });
+    event.target.classList.add("active");
+  }
+
+  function deletePost(id) {
+    if (confirm("Are you sure to delete this post?")) {
+      fetch(`http://127.0.0.1:5000/api/article/${id}`, {
+        method: "DELETE",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            fetchPosts();
+          }
+        })
+        .catch((error) => {
+          console.error("Fetch error:", error);
+        });
+    }
+  }
+</script>
+
+{% endblock %}

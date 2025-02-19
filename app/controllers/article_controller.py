@@ -53,6 +53,22 @@ def save_post(id=None):
     )
 
 
+def all_posts():
+    db = next(get_db())
+    posts = db.query(Post).all()
+
+    return (
+        jsonify(
+            {
+                "success": True,
+                "message": "Get all posts successfully.",
+                "data": [post.to_dict() for post in posts],
+            }
+        ),
+        200,
+    )
+
+
 def get_posts(limit, offset):
     db = next(get_db())
     posts = db.query(Post).offset(offset).limit(limit).all()
