@@ -1,6 +1,6 @@
 # main
 from flask import Flask
-from app.views.article_view import article_bp
+from app.routes.article_view import article_bp
 from app.database import reset_database
 
 reset_database()
